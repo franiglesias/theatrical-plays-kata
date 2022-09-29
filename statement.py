@@ -20,14 +20,10 @@ def statement(invoice, plays):
         raise ValueError(f'unknown type: {play["type"]}')
 
     def calculate_amount_for_comedy(perf):
-        base_amount = Amount(30000)
-        amount_with_extra = base_amount.add(Amount(extra_amount_for_high_audience_in_comedy(perf)))
-        comedy_amount = amount_with_extra.add(Amount(300 * perf['audience']))
-
-        amount = 30000
-        amount += extra_amount_for_high_audience_in_comedy(perf)
-        amount += 300 * perf['audience']
-        return amount
+        return Amount(30000)\
+            .add(Amount(extra_amount_for_high_audience_in_comedy(perf)))\
+            .add(Amount(300 * perf['audience']))\
+            .current()
 
     def extra_amount_for_high_audience_in_comedy(perf):
         if perf['audience'] <= 20:
