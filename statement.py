@@ -27,23 +27,23 @@ def statement(invoice, plays):
 
     def extra_amount_for_high_audience_in_comedy(perf):
         if perf['audience'] <= 20:
-            return 0
+            return Amount(0).current()
 
-        return 10000 + 500 * (perf['audience'] - 20)
+        return Amount(10000 + 500 * (perf['audience'] - 20)).current()
 
     def calculate_amount_for_tragedy(perf):
-        amount = 40000
-        amount += extra_amount_for_high_audience_in_tragedy(perf)
-        return amount
+        return Amount(40000)\
+            .add(Amount(extra_amount_for_high_audience_in_tragedy(perf)))\
+            .current()
+
 
     def extra_amount_for_high_audience_in_tragedy(perf):
         if perf['audience'] <= 30:
-            return 0
+            return Amount(0).current()
 
-        return 1000 * (perf['audience'] - 30)
+        return Amount(1000 * (perf['audience'] - 30)).current()
 
     def calculate_performance_credits(perf, play):
-        # add volume credits
         credits = max(perf['audience'] - 30, 0)
         # add extra credit for every ten comedy attendees
         credits += extra_volume_credits_for_comedy(perf, play)
