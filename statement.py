@@ -1,11 +1,12 @@
 import math
 
 from domain.amount import Amount
+from domain.credits import Credits
 
 
 def statement(invoice, plays):
     invoice_amount = Amount(0)
-    volume_credits = 0
+    volume_credits = Credits(0)
     result = f'Statement for {invoice["customer"]}\n'
 
     def format_as_dollars(amount):
@@ -41,16 +42,15 @@ def statement(invoice, plays):
         return Amount(1000 * (perf['audience'] - 30))
 
     def calculate_performance_credits(perf, play):
-        credits = max(perf['audience'] - 30, 0)
-        # add extra credit for every ten comedy attendees
-        credits += extra_volume_credits_for_comedy(perf, play)
-        return credits
+        return Credits(max(perf['audience'] - 30, 0)).\
+            add(extra_volume_credits_for_comedy(perf, play))
+
 
     def extra_volume_credits_for_comedy(perf, play):
         if "comedy" != play["type"]:
-            return 0
+            return Credits(0)
 
-        return math.floor(perf['audience'] / 5)
+        return Credits(math.floor(perf['audience'] / 5))
 
     for perf in invoice['performances']:
         play = plays[perf['playID']]
@@ -60,7 +60,7 @@ def statement(invoice, plays):
 
         result += line
         invoice_amount = invoice_amount.add(this_amount)
-        volume_credits += performance_credits
+        volume_credits = volume_credits.add(performance_credits)
 
     result += f'Amount owed is {format_as_dollars(invoice_amount.current() // 100)}\n'
     result += f'You earned {volume_credits} credits\n'
