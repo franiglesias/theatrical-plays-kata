@@ -15,19 +15,11 @@ def statement(invoice, plays):
     def format_as_dollars(amount):
         return f"${amount:0,.2f}"
 
-    def calculate_performance_amount(play, performance):
-        if play['type'] == "tragedy":
-            return performance.calculate_amount_for_tragedy()
-        if play['type'] == "comedy":
-            return performance.calculate_amount_for_comedy()
-
-        raise ValueError(f'unknown type: {play["type"]}')
-
     for perf in invoice['performances']:
         performance = Performance(perf)
         play = plays[performance.play_id()]
-        this_amount = calculate_performance_amount(play, performance)
-        performance_credits = performance.calculate_performance_credits(play)
+        this_amount = performance.amount(play)
+        performance_credits = performance.credits(play)
 
         line = f' {play["name"]}: {format_as_dollars(this_amount.current() / 100)} ({performance.audience()} seats)\n'
         printer.print(line)

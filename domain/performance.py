@@ -35,7 +35,7 @@ class Performance:
 
         return Amount(1000 * (self.audience() - 30))
 
-    def calculate_performance_credits(self, play):
+    def credits(self, play):
         return Credits(max(self.audience() - 30, 0)). \
             add(self.extra_volume_credits_for_comedy(play))
 
@@ -45,7 +45,7 @@ class Performance:
 
         return Credits(math.floor(self.audience() / 5))
 
-    def calculate_performance_amount(self, play):
+    def amount(self, play):
         if play['type'] == "tragedy":
             return self.calculate_amount_for_tragedy()
         if play['type'] == "comedy":
