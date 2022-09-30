@@ -40,15 +40,15 @@ class Performance:
             add(self.extra_volume_credits_for_comedy(play))
 
     def extra_volume_credits_for_comedy(self, play):
-        if "comedy" != play["type"]:
+        if "comedy" != play.type():
             return Credits(0)
 
         return Credits(math.floor(self.audience() / 5))
 
     def amount(self, play):
-        if play['type'] == "tragedy":
+        if play.type() == "tragedy":
             return self.calculate_amount_for_tragedy()
-        if play['type'] == "comedy":
+        if play.type() == "comedy":
             return self.calculate_amount_for_comedy()
 
-        raise ValueError(f'unknown type: {play["type"]}')
+        raise ValueError(f'unknown type: {play.type()}')
