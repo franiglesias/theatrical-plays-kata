@@ -1,7 +1,6 @@
 from domain.amount import Amount
 from domain.credits import Credits
 from domain.performance import Performance
-from domain.play import Play
 from domain.printer import Printer
 
 
@@ -16,9 +15,8 @@ def statement(invoice, plays):
 
     for perf in invoice['performances']:
         performance = Performance(perf, plays)
-        play = Play(plays[performance.play_id()])
-        this_amount = performance.amount(play)
-        performance_credits = performance.credits(play)
+        this_amount = performance.amount()
+        performance_credits = performance.credits()
 
         line = f' {performance.play().name()}: {format_as_dollars(this_amount.current() / 100)} ({performance.audience()} seats)\n'
         printer.print(line)

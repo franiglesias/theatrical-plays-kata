@@ -41,20 +41,20 @@ class Performance:
 
         return Amount(1000 * (self.audience() - 30))
 
-    def credits(self, play):
+    def credits(self):
         return Credits(max(self.audience() - 30, 0)). \
-            add(self.extra_volume_credits_for_comedy(play))
+            add(self.extra_volume_credits_for_comedy())
 
-    def extra_volume_credits_for_comedy(self, play):
-        if "comedy" != play.type():
+    def extra_volume_credits_for_comedy(self):
+        if "comedy" != self.play().type():
             return Credits(0)
 
         return Credits(math.floor(self.audience() / 5))
 
-    def amount(self, play):
-        if play.type() == "tragedy":
+    def amount(self):
+        if self.play().type() == "tragedy":
             return self.calculate_amount_for_tragedy()
-        if play.type() == "comedy":
+        if self.play().type() == "comedy":
             return self.calculate_amount_for_comedy()
 
-        raise ValueError(f'unknown type: {play.type()}')
+        raise ValueError(f'unknown type: {self.play().type()}')
