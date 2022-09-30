@@ -2,6 +2,7 @@ import math
 
 from domain.amount import Amount
 from domain.credits import Credits
+from domain.performance import Performance
 from domain.printer import Printer
 
 
@@ -14,7 +15,7 @@ def statement(invoice, plays):
     def format_as_dollars(amount):
         return f"${amount:0,.2f}"
 
-    def calculate_performance_amount(perf, play):
+    def calculate_performance_amount(perf, play, performance):
         if play['type'] == "tragedy":
             return calculate_amount_for_tragedy(perf)
         if play['type'] == "comedy":
@@ -54,11 +55,12 @@ def statement(invoice, plays):
         return Credits(math.floor(perf['audience'] / 5))
 
     for perf in invoice['performances']:
-        play = plays[perf['playID']]
-        this_amount = calculate_performance_amount(perf, play)
+        performance = Performance(perf)
+        play = plays[performance.play_id()]
+        this_amount = calculate_performance_amount(perf, play, performance)
         performance_credits = calculate_performance_credits(perf, play)
 
-        line = f' {play["name"]}: {format_as_dollars(this_amount.current() / 100)} ({perf["audience"]} seats)\n'
+        line = f' {play["name"]}: {format_as_dollars(this_amount.current() / 100)} ({performance.audience()} seats)\n'
         printer.print(line)
 
         invoice_amount = invoice_amount.add(this_amount)
