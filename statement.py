@@ -1,5 +1,3 @@
-import math
-
 from domain.amount import Amount
 from domain.credits import Credits
 from domain.performance import Performance
