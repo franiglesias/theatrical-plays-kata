@@ -44,3 +44,11 @@ class Performance:
             return Credits(0)
 
         return Credits(math.floor(self.audience() / 5))
+
+    def calculate_performance_amount(self, play):
+        if play['type'] == "tragedy":
+            return self.calculate_amount_for_tragedy()
+        if play['type'] == "comedy":
+            return self.calculate_amount_for_comedy()
+
+        raise ValueError(f'unknown type: {play["type"]}')
