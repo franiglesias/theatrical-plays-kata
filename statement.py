@@ -23,21 +23,11 @@ def statement(invoice, plays):
 
         raise ValueError(f'unknown type: {play["type"]}')
 
-    def calculate_performance_credits(perf, play):
-        return Credits(max(perf['audience'] - 30, 0)). \
-            add(extra_volume_credits_for_comedy(perf, play))
-
-    def extra_volume_credits_for_comedy(perf, play):
-        if "comedy" != play["type"]:
-            return Credits(0)
-
-        return Credits(math.floor(perf['audience'] / 5))
-
     for perf in invoice['performances']:
         performance = Performance(perf)
         play = plays[performance.play_id()]
         this_amount = calculate_performance_amount(play, performance)
-        performance_credits = calculate_performance_credits(perf, play)
+        performance_credits = performance.calculate_performance_credits(play)
 
         line = f' {play["name"]}: {format_as_dollars(this_amount.current() / 100)} ({performance.audience()} seats)\n'
         printer.print(line)

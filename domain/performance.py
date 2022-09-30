@@ -1,4 +1,7 @@
+import math
+
 from domain.amount import Amount
+from domain.credits import Credits
 
 
 class Performance:
@@ -31,3 +34,13 @@ class Performance:
             return Amount(0)
 
         return Amount(1000 * (self.audience() - 30))
+
+    def calculate_performance_credits(self, play):
+        return Credits(max(self.audience() - 30, 0)). \
+            add(self.extra_volume_credits_for_comedy(play))
+
+    def extra_volume_credits_for_comedy(self, play):
+        if "comedy" != play["type"]:
+            return Credits(0)
+
+        return Credits(math.floor(self.audience() / 5))
