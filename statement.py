@@ -15,7 +15,7 @@ def statement(invoice, plays):
         return f"${amount:0,.2f}"
 
     for perf in invoice['performances']:
-        performance = Performance(perf)
+        performance = Performance(perf, plays)
         play = Play(plays[performance.play_id()])
         this_amount = performance.amount(play)
         performance_credits = performance.credits(play)

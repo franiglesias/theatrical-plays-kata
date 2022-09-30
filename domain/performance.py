@@ -5,14 +5,16 @@ from domain.credits import Credits
 
 
 class Performance:
-    def __init__(self, perf):
-        self.data = perf
+    def __init__(self, perf, plays):
+        self._audience = perf['audience']
+        self._play_id = perf['playID']
+        self._play = plays[perf['playID']]
 
     def audience(self):
-        return self.data['audience']
+        return self._audience
 
     def play_id(self):
-        return self.data['playID']
+        return self._play_id
 
     def calculate_amount_for_comedy(self):
         return Amount(30000) \
