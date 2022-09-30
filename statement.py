@@ -20,7 +20,7 @@ def statement(invoice, plays):
         this_amount = performance.amount(play)
         performance_credits = performance.credits(play)
 
-        line = f' {play.name()}: {format_as_dollars(this_amount.current() / 100)} ({performance.audience()} seats)\n'
+        line = f' {performance.play().name()}: {format_as_dollars(this_amount.current() / 100)} ({performance.audience()} seats)\n'
         printer.print(line)
 
         invoice_amount = invoice_amount.add(this_amount)

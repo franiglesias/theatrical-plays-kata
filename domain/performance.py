@@ -2,19 +2,23 @@ import math
 
 from domain.amount import Amount
 from domain.credits import Credits
+from domain.play import Play
 
 
 class Performance:
     def __init__(self, perf, plays):
         self._audience = perf['audience']
         self._play_id = perf['playID']
-        self._play = plays[perf['playID']]
+        self._play = Play(plays[perf['playID']])
 
     def audience(self):
         return self._audience
 
     def play_id(self):
         return self._play_id
+
+    def play(self):
+        return self._play
 
     def calculate_amount_for_comedy(self):
         return Amount(30000) \
