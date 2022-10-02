@@ -9,6 +9,7 @@ class Performance:
         self._audience = perf['audience']
         self._play_id = perf['playID']
         self._play = plays.get_by_id(self._play_id)
+        self._amount = None
 
     def audience(self):
         return self._audience
@@ -48,10 +49,17 @@ class Performance:
         return Credits(math.floor(self.audience() / 5))
 
     def amount(self):
+        if self._amount is not None:
+            return self._amount
+
         if self.play().type() == "tragedy":
-            return self.calculate_amount_for_tragedy()
+            tragedy = self.calculate_amount_for_tragedy()
+            self._amount = tragedy
+            return tragedy
         if self.play().type() == "comedy":
-            return self.calculate_amount_for_comedy()
+            comedy = self.calculate_amount_for_comedy()
+            self._amount = comedy
+            return comedy
 
         raise ValueError(f'unknown type: {self.play().type()}')
 
