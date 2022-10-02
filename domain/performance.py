@@ -13,9 +13,6 @@ class Performance:
     def audience(self):
         return self._audience
 
-    def play_id(self):
-        return self._play_id
-
     def play(self):
         return self._play
 
@@ -57,3 +54,32 @@ class Performance:
             return self.calculate_amount_for_comedy()
 
         raise ValueError(f'unknown type: {self.play().type()}')
+
+
+class Performances:
+    def __init__(self, data, plays):
+        self._data = data
+        self._plays = plays
+
+    def __iter__(self):
+        return PerformancesIterator(self)
+
+    def by_index(self, index):
+        return Performance(self._data[index], self._plays)
+
+    def size(self):
+        return len(self._data)
+
+
+class PerformancesIterator:
+    def __init__(self, performances):
+        self._performances = performances
+        self._current = 0
+
+    def __next__(self):
+        if self._current >= self._performances.size():
+            raise StopIteration
+
+        result = self._performances.by_index(self._current)
+        self._current += 1
+        return result
