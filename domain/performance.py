@@ -5,10 +5,9 @@ from domain.credits import Credits
 
 
 class Performance:
-    def __init__(self, perf, plays):
-        self._audience = perf['audience']
-        self._play_id = perf['playID']
-        self._play = plays.get_by_id(self._play_id)
+    def __init__(self, audience, play):
+        self._audience = audience
+        self._play = play
         self._amount = None
 
     def audience(self):
@@ -73,7 +72,8 @@ class Performances:
         return PerformancesIterator(self)
 
     def by_index(self, index):
-        return Performance(self._data[index], self._plays)
+        play = self._data[index]
+        return Performance(play['audience'], self._plays.get_by_id(play['playID']))
 
     def size(self):
         return len(self._data)
