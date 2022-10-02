@@ -1,7 +1,6 @@
 from domain.amount import Amount
 from domain.credits import Credits
-from domain.performance import Performances
-from domain.play import Plays
+from domain.invoice import Invoice
 from domain.printer import Printer
 
 
@@ -9,14 +8,14 @@ def statement(invoice, plays):
     printer = Printer()
     invoice_amount = Amount(0)
     volume_credits = Credits(0)
-    performances = Performances(invoice['performances'], Plays(plays))
+    inv = Invoice(invoice, plays)
 
-    printer.print(f'Statement for {invoice["customer"]}\n')
+    printer.print(f'Statement for {inv.customer()}\n')
 
     def format_as_dollars(amount):
         return f"${amount:0,.2f}"
 
-    for performance in performances:
+    for performance in inv.performances():
         this_amount = performance.amount()
         performance_credits = performance.credits()
 
