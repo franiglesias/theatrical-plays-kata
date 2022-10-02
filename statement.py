@@ -1,6 +1,7 @@
 from domain.amount import Amount
 from domain.credits import Credits
 from domain.performance import Performance
+from domain.play import Plays
 from domain.printer import Printer
 
 
@@ -14,7 +15,7 @@ def statement(invoice, plays):
         return f"${amount:0,.2f}"
 
     for perf in invoice['performances']:
-        performance = Performance(perf, plays)
+        performance = Performance(perf, Plays(plays))
         this_amount = performance.amount()
         performance_credits = performance.credits()
 

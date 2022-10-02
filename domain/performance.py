@@ -2,14 +2,13 @@ import math
 
 from domain.amount import Amount
 from domain.credits import Credits
-from domain.play import Play
 
 
 class Performance:
     def __init__(self, perf, plays):
         self._audience = perf['audience']
         self._play_id = perf['playID']
-        self._play = Play(plays[perf['playID']])
+        self._play = plays.get_by_id(self._play_id)
 
     def audience(self):
         return self._audience
