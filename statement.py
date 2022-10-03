@@ -16,7 +16,7 @@ def statement(invoice, plays):
         return f"${amount:0,.2f}"
 
     for performance in inv.performances():
-        line = f' {performance.play().name()}: {format_as_dollars(performance.amount().current() / 100)} ({performance.audience()} seats)\n'
+        line = f' {performance.title()}: {format_as_dollars(performance.amount().current() / 100)} ({performance.audience()} seats)\n'
         printer.print(line)
 
         invoice_amount = invoice_amount.add(performance.amount())

@@ -16,6 +16,9 @@ class Performance:
     def play(self):
         return self._play
 
+    def title(self):
+        return self._play.name()
+
     def calculate_amount_for_comedy(self):
         return Amount(30000) \
             .add(self.extra_amount_for_high_audience_in_comedy()) \
