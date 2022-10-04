@@ -15,12 +15,11 @@ def statement(invoice, plays):
     def format_as_dollars(amount):
         return f"${amount:0,.2f}"
 
-    def format_line(title, audience, amount):
+    def formatted_line(title, audience, amount):
         return f' {title}: {format_as_dollars(amount.current() / 100)} ({audience} seats)\n'
 
     for performance in inv.performances():
-        line = format_line(performance.title(), performance.audience(), performance.amount())
-        printer.print(line)
+        printer.print(formatted_line(performance.title(), performance.audience(), performance.amount()))
         invoice_amount = invoice_amount.add(performance.amount())
         volume_credits = volume_credits.add(performance.credits())
 
