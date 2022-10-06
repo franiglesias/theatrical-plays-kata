@@ -1,6 +1,3 @@
-import math
-
-from domain.amount import Amount
 from domain.credits import Credits
 
 
@@ -19,51 +16,17 @@ class Performance:
     def title(self):
         return self._play.name()
 
-    def calculate_amount_for_comedy(self):
-        return Amount(30000) \
-            .add(self.extra_amount_for_high_audience_in_comedy()) \
-            .add(Amount(300 * self.audience()))
-
-    def extra_amount_for_high_audience_in_comedy(self):
-        if self.audience() <= 20:
-            return Amount(0)
-
-        return Amount(10000 + 500 * (self.audience() - 20))
-
-    def calculate_amount_for_tragedy(self):
-        return Amount(40000) \
-            .add(self.extra_amount_for_high_audience_in_tragedy())
-
-    def extra_amount_for_high_audience_in_tragedy(self):
-        if self.audience() <= 30:
-            return Amount(0)
-
-        return Amount(1000 * (self.audience() - 30))
-
     def credits(self):
         return Credits(max(self.audience() - 30, 0)). \
-            add(self.extra_volume_credits_for_comedy())
-
-    def extra_volume_credits_for_comedy(self):
-        if "comedy" != self.play().type():
-            return Credits(0)
-
-        return Credits(math.floor(self.audience() / 5))
+            add(self.play().credits(self.audience()))
 
     def amount(self):
         if self._amount is not None:
             return self._amount
 
-        if self.play().type() == "tragedy":
-            tragedy = self.calculate_amount_for_tragedy()
-            self._amount = tragedy
-            return tragedy
-        if self.play().type() == "comedy":
-            comedy = self.calculate_amount_for_comedy()
-            self._amount = comedy
-            return comedy
+        self._amount = self.play().amount(self.audience())
 
-        raise ValueError(f'unknown type: {self.play().type()}')
+        return self._amount
 
 
 class Performances:
