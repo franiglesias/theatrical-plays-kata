@@ -1,11 +1,11 @@
 import unittest
 
-from domain.printer import Printer
+from infrastructure.console_printer import ConsolePrinter
 
 
 class PrinterTestCase(unittest.TestCase):
     def test_can_print_lines(self):
-        printer = Printer()
+        printer = ConsolePrinter()
 
         printer.print("Line 1")
         printer.print("Line 2")

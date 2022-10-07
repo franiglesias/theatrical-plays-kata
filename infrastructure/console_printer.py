@@ -1,4 +1,4 @@
-class Printer:
+class ConsolePrinter:
     def __init__(self):
         self._lines = ""
 
