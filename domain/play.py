@@ -6,13 +6,14 @@ from domain.credits import Credits
 
 class Play:
     def __init__(self, data):
-        self._data = data
+        self._name = data['name']
+        self._type = data['type']
 
     def name(self):
-        return self._data['name']
+        return self._name
 
     def type(self):
-        return self._data['type']
+        return self._type
 
     def calculate_amount_for_comedy(self, audience):
         return Amount(30000) \
