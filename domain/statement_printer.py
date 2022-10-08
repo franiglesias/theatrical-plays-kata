@@ -17,18 +17,15 @@ class StatementPrinter:
             self.print_details(performance)
 
     def print_details(self, performance):
-        line = Line(performance.title(), performance.audience(), performance.amount())
-        self.printer.print(line.formatted())
+        self.printer.print(FormattedPerformance(performance).formatted())
 
 
-class Line:
-    def __init__(self, title, audience, amount):
-        self.title = title
-        self.audience = audience
-        self.amount = amount
+class FormattedPerformance:
+    def __init__(self, performance):
+        self._performance = performance
 
     def formatted(self):
-        return f' {self.title}: {FormattedAmount(self.amount).dollars()} ({self.audience} seats)\n'
+        return f' {self._performance.title()}: {FormattedAmount(self._performance.amount()).dollars()} ({self._performance.audience()} seats)\n'
 
 
 class FormattedAmount:
