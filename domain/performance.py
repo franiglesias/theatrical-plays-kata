@@ -28,6 +28,9 @@ class Performance:
 
         return self._amount
 
+    def fill(self, statement_printer):
+        statement_printer.fill('line', self.title(), self.amount(), self.audience())
+
 
 class Performances:
     def __init__(self, data, plays):
