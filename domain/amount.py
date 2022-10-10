@@ -6,5 +6,4 @@ class Amount:
         return self._amount
 
     def add(self, other):
-        new_amount = self._amount + other.current()
-        return Amount(new_amount)
+        return Amount(self._amount + other.current())

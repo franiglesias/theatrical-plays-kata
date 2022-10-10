@@ -2,9 +2,7 @@ class StatementPrinter:
     def __init__(self, printer):
         self.printer = printer
 
-    def print(self, invoice):
-        invoice.fill(self)
-
+    def print(self):
         return self.printer.output()
 
     def fill(self, template, *args):
