@@ -1,6 +1,7 @@
 import math
 
 from domain.amount import Amount
+from domain.audience import Audience
 from domain.credits import Credits
 
 
@@ -24,42 +25,36 @@ class Play:
 class Tragedy(Play):
     def __init__(self, data):
         self._name = data['name']
+        self.minimum_amount = 0
+        self.threshold = 30
+        self.coefficient = 1000
 
     def name(self):
         return self._name
-
-    def extra_amount_for_high_audience(self, audience):
-        if audience <= 30:
-            return Amount(0)
-
-        return Amount(1000 * (audience - 30))
 
     def credits(self, audience):
         return Credits(0)
 
     def amount(self, audience):
-        return Amount(40000).add(self.extra_amount_for_high_audience(audience))
+        return Amount(40000).add(Audience(audience).amount(self.threshold, self.minimum_amount, self.coefficient))
 
 
 class Comedy(Play):
     def __init__(self, data):
         self._name = data['name']
+        self.threshold = 20
+        self.minimum_amount = 10000
+        self.coefficient = 500
 
     def name(self):
         return self._name
-
-    def extra_amount_for_high_audience(self, audience):
-        if audience <= 20:
-            return Amount(0)
-
-        return Amount(10000 + 500 * (audience - 20))
 
     def credits(self, audience):
         return Credits(math.floor(audience / 5))
 
     def amount(self, audience):
         return Amount(30000) \
-            .add(self.extra_amount_for_high_audience(audience)) \
+            .add(Audience(audience).amount(self.threshold, self.minimum_amount, self.coefficient)) \
             .add(Amount(300 * audience))
 
 
