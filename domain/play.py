@@ -5,50 +5,62 @@ from domain.credits import Credits
 
 
 class Play:
+    @staticmethod
+    def create(data):
+        if data['type'] == "tragedy":
+            return Tragedy(data)
+        if data['type'] == "comedy":
+            return Comedy(data)
+
+        raise ValueError(f'unknown type: {data["type"]}')
+
+    def credits(self, audience):
+        pass
+
+    def amount(self, audience):
+        pass
+
+
+class Tragedy(Play):
     def __init__(self, data):
         self._name = data['name']
-        self._type = data['type']
 
     def name(self):
         return self._name
 
-    def type(self):
-        return self._type
-
-    def calculate_amount_for_comedy(self, audience):
-        return Amount(30000) \
-            .add(self.extra_amount_for_high_audience_in_comedy(audience)) \
-            .add(Amount(300 * audience))
-
-    def extra_amount_for_high_audience_in_comedy(self, audience):
-        if audience <= 20:
-            return Amount(0)
-
-        return Amount(10000 + 500 * (audience - 20))
-
-    def calculate_amount_for_tragedy(self, audience):
-        return Amount(40000) \
-            .add(self.extra_amount_for_high_audience_in_tragedy(audience))
-
-    def extra_amount_for_high_audience_in_tragedy(self, audience):
+    def extra_amount_for_high_audience(self, audience):
         if audience <= 30:
             return Amount(0)
 
         return Amount(1000 * (audience - 30))
 
     def credits(self, audience):
-        if "comedy" != self.type():
-            return Credits(0)
+        return Credits(0)
 
+    def amount(self, audience):
+        return Amount(40000).add(self.extra_amount_for_high_audience(audience))
+
+
+class Comedy(Play):
+    def __init__(self, data):
+        self._name = data['name']
+
+    def name(self):
+        return self._name
+
+    def extra_amount_for_high_audience(self, audience):
+        if audience <= 20:
+            return Amount(0)
+
+        return Amount(10000 + 500 * (audience - 20))
+
+    def credits(self, audience):
         return Credits(math.floor(audience / 5))
 
     def amount(self, audience):
-        if self.type() == "tragedy":
-            return self.calculate_amount_for_tragedy(audience)
-        if self.type() == "comedy":
-            return self.calculate_amount_for_comedy(audience)
-
-        raise ValueError(f'unknown type: {self.type()}')
+        return Amount(30000) \
+            .add(self.extra_amount_for_high_audience(audience)) \
+            .add(Amount(300 * audience))
 
 
 class Plays:
@@ -56,4 +68,4 @@ class Plays:
         self._data = data
 
     def get_by_id(self, play_id):
-        return Play(self._data[play_id])
+        return Play.create(self._data[play_id])
