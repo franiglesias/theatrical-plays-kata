@@ -8,18 +8,18 @@ class StatementPrinter:
         return self.printer.output()
 
     def fill(self, template, *args):
-        getattr(self, 'fill_' + template)(*args)
+        getattr(self, '_fill_' + template)(*args)
 
-    def fill_credits(self, credits):
+    def _fill_credits(self, credits):
         self.printer.print(f'You earned {credits.current()} credits\n')
 
-    def fill_amount(self, amount):
+    def _fill_amount(self, amount):
         self.printer.print(f'Amount owed is {FormattedAmount(amount).dollars()}\n')
 
-    def fill_customer(self, customer):
+    def _fill_customer(self, customer):
         self.printer.print(f'Statement for {customer}\n')
 
-    def fill_line(self, title, amount, audience):
+    def _fill_line(self, title, amount, audience):
         self.printer.print(f' {title}: {FormattedAmount(amount).dollars()} ({audience} seats)\n')
 
 

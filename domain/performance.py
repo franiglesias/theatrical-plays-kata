@@ -10,21 +10,18 @@ class Performance:
     def audience(self):
         return self._audience
 
-    def play(self):
-        return self._play
-
     def title(self):
         return self._play.name()
 
     def credits(self):
         return Credits(max(self.audience() - 30, 0)). \
-            add(self.play().credits(self.audience()))
+            add(self._play.credits(self.audience()))
 
     def amount(self):
         if self._amount is not None:
             return self._amount
 
-        self._amount = self.play().amount(self.audience())
+        self._amount = self._play.amount(self.audience())
 
         return self._amount
 
