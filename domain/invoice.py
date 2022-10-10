@@ -17,11 +17,11 @@ class Invoice:
         return self._performances
 
     def amount(self):
-        invoice_amount = Amount(0)
+        amount = Amount(0)
         for performance in self.performances():
-            invoice_amount = invoice_amount.add(performance.amount())
+            amount = amount.add(performance.amount())
 
-        return invoice_amount
+        return amount
 
     def credits(self):
         volume_credits = Credits(0)
@@ -29,3 +29,10 @@ class Invoice:
             volume_credits = volume_credits.add(performance.credits())
 
         return volume_credits
+
+    def fill(self, statement_printer):
+        statement_printer.fill('customer', self.customer())
+        for performance in self.performances():
+            statement_printer.fill('line', performance.title(), performance.amount(), performance.audience())
+        statement_printer.fill('amount', self.amount())
+        statement_printer.fill('credits', self.credits())

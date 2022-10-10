@@ -3,29 +3,24 @@ class StatementPrinter:
         self.printer = printer
 
     def print(self, invoice):
-        self.printer.print(f'Statement for {invoice.customer()}\n')
-
-        self.print_lines(invoice)
-
-        self.printer.print(f'Amount owed is {FormattedAmount(invoice.amount()).dollars()}\n')
-        self.printer.print(f'You earned {invoice.credits().current()} credits\n')
+        invoice.fill(self)
 
         return self.printer.output()
 
-    def print_lines(self, invoice):
-        for performance in invoice.performances():
-            self.print_details(performance)
+    def fill(self, template, *args):
+        getattr(self, 'fill_' + template)(*args)
 
-    def print_details(self, performance):
-        self.printer.print(FormattedPerformance(performance).formatted())
+    def fill_credits(self, credits):
+        self.printer.print(f'You earned {credits.current()} credits\n')
 
+    def fill_amount(self, amount):
+        self.printer.print(f'Amount owed is {FormattedAmount(amount).dollars()}\n')
 
-class FormattedPerformance:
-    def __init__(self, performance):
-        self._performance = performance
+    def fill_customer(self, customer):
+        self.printer.print(f'Statement for {customer}\n')
 
-    def formatted(self):
-        return f' {self._performance.title()}: {FormattedAmount(self._performance.amount()).dollars()} ({self._performance.audience()} seats)\n'
+    def fill_line(self, title, amount, audience):
+        self.printer.print(f' {title}: {FormattedAmount(amount).dollars()} ({audience} seats)\n')
 
 
 class FormattedAmount:
