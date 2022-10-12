@@ -21,9 +21,7 @@ class Performance:
     def amount(self):
         if self._amount is not None:
             return self._amount
-
         self._amount = self._play.amount(self.audience())
-
         return self._amount
 
     def fill(self, statement_printer):
@@ -40,7 +38,6 @@ class Performances:
         for data in self._data:
             performance = self._performance(data)
             amount = amount.add(performance.amount())
-
         return amount
 
     def _performance(self, data):
@@ -51,7 +48,6 @@ class Performances:
         for data in self._data:
             performance = self._performance(data)
             volume_credits = volume_credits.add(performance.credits())
-
         return volume_credits
 
     def fill(self, statement_printer):
