@@ -1,3 +1,4 @@
+from domain.amount import Amount
 from domain.credits import Credits
 
 
@@ -34,26 +35,26 @@ class Performances:
         self._data = data
         self._plays = plays
 
-    def __iter__(self):
-        return PerformancesIterator(self)
+    def amount(self):
+        amount = Amount(0)
+        for data in self._data:
+            performance = self._performance(data)
+            amount = amount.add(performance.amount())
 
-    def by_index(self, index):
-        play = self._data[index]
-        return Performance(play['audience'], self._plays.get_by_id(play['playID']))
+        return amount
 
-    def size(self):
-        return len(self._data)
+    def _performance(self, data):
+        return Performance(data['audience'], self._plays.get_by_id(data['playID']))
 
+    def credits(self):
+        volume_credits = Credits(0)
+        for data in self._data:
+            performance = self._performance(data)
+            volume_credits = volume_credits.add(performance.credits())
 
-class PerformancesIterator:
-    def __init__(self, performances):
-        self._performances = performances
-        self._current = 0
+        return volume_credits
 
-    def __next__(self):
-        if self._current >= self._performances.size():
-            raise StopIteration
-
-        result = self._performances.by_index(self._current)
-        self._current += 1
-        return result
+    def fill(self, statement_printer):
+        for data in self._data:
+            performance = self._performance(data)
+            performance.fill(statement_printer)
