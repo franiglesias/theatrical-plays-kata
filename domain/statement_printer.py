@@ -1,24 +1,35 @@
 class StatementPrinter:
     def __init__(self, printer):
-        self.printer = printer
+        self._printer = printer
+        self._customer = None
+        self._amount = None
+        self._credits = None
+        self._lines = []
 
     def print(self):
-        return self.printer.output()
+        self._printer.print(f'Statement for {self._customer}\n')
+        for line in self._lines:
+            self._printer.print(f' {line["title"]}: {FormattedAmount(line["amount"]).dollars()} ({line["audience"]} seats)\n')
+
+        self._printer.print(f'Amount owed is {FormattedAmount(self._amount).dollars()}\n')
+        self._printer.print(f'You earned {self._credits.current()} credits\n')
+
+        return self._printer.output()
 
     def fill(self, template, *args):
         getattr(self, '_fill_' + template)(*args)
 
     def _fill_credits(self, credits):
-        self.printer.print(f'You earned {credits.current()} credits\n')
+        self._credits = credits
 
     def _fill_amount(self, amount):
-        self.printer.print(f'Amount owed is {FormattedAmount(amount).dollars()}\n')
+        self._amount = amount
 
     def _fill_customer(self, customer):
-        self.printer.print(f'Statement for {customer}\n')
+        self._customer = customer
 
     def _fill_line(self, title, amount, audience):
-        self.printer.print(f' {title}: {FormattedAmount(amount).dollars()} ({audience} seats)\n')
+        self._lines.append({"title": title, "amount": amount, "audience": audience})
 
 
 class FormattedAmount:

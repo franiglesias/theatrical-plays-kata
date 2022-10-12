@@ -25,8 +25,8 @@ class Invoice:
         return volume_credits
 
     def fill(self, statement_printer):
-        statement_printer.fill('customer', self._customer)
         for performance in self._performances:
             performance.fill(statement_printer)
-        statement_printer.fill('amount', self._amount())
         statement_printer.fill('credits', self._credits())
+        statement_printer.fill('amount', self._amount())
+        statement_printer.fill('customer', self._customer)
